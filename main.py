@@ -1,4 +1,3 @@
-import aiohttp.web
 import jinja2
 import aiohttp_jinja2
 from aiohttp import web
@@ -37,7 +36,7 @@ async def file_uploaded(request):
 @routes.get('/download/{name}')
 async def file_download(request):
     name = request.match_info.get('name')
-    response = aiohttp.web.FileResponse(os.path.join(os.getcwd(), "Files", name))
+    response = web.FileResponse(path=os.path.join(os.getcwd(), "Files", name))
     return response
 
 
