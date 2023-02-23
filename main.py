@@ -1,9 +1,9 @@
+import aiohttp.web
 import jinja2
 import aiohttp_jinja2
 from aiohttp import web
 import os
 from zipfile import ZipFile
-import shutil
 
 app = web.Application()
 routes = web.RouteTableDef()
@@ -24,14 +24,20 @@ async def homepage(request):
 async def file_uploaded(request):
     data = await request.post()
     zip_file = data['zip'].file
-    shutil.rmtree(os.path.join(os.getcwd(), "Files"))
     with ZipFile(zip_file) as zip:
         li = zip.namelist()
         zip.extractall(os.path.join(os.getcwd(), "Files"))
 
-    c = {'names': li}
+    c = {'names': li, 'path': os.path.join(os.getcwd(), "Files")}
     response = aiohttp_jinja2.render_template("file.html", request, context=c)
 
+    return response
+
+
+@routes.get('/download/{name}')
+async def file_download(request):
+    name = request.match_info.get('name')
+    response = aiohttp.web.FileResponse(os.path.join(os.getcwd(), "Files", name))
     return response
 
 
