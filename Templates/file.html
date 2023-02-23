@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Download Files</title>
+    </head>
+    <body>
+    <h2>Click on name to download file</h2>
+        {% for name in names %}
+        <li><a href="download/{{ name }}" download> {{ name }} </a></li>
+        {% endfor %}
+    <a href="/">Upload another zip</a>
+    </body>
+</html>
